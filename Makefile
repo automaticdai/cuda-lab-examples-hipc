@@ -7,6 +7,9 @@ all:
 	nvcc -o bin/vect_add_multithread src/vect_add_multithread.cu 
 	nvcc -o bin/vect_add_multigrid src/vect_add_multigrid.cu 
 	nvcc -o bin/memory_coalescing src/memory_coalescing.cu
+	nvcc -o bin/monte_carlo src/monte_carlo.cu -lcurand
+	gcc -o bin/vect_add_cpu src/vect_add.c
+	gcc -o bin/monte_carlo_cpu src/monte_carlo.c -lm
 
 .PHONY: clean
 clean:
