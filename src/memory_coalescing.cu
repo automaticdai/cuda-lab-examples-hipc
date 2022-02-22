@@ -5,8 +5,7 @@
 
 // Convenience function for checking CUDA runtime API results
 // can be wrapped around any runtime API call. No-op in release builds.
-inline
-cudaError_t checkCuda(cudaError_t result)
+inline cudaError_t checkCuda(cudaError_t result)
 {
 #if defined(DEBUG) || defined(_DEBUG)
   if (result != cudaSuccess) {

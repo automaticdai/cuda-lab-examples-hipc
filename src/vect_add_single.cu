@@ -9,11 +9,8 @@
 #define MAX_ERR 1e-6
 
 __global__ void vector_add(float *out, float *a, float *b, int n) {
-    int tid = blockIdx.x * blockDim.x + threadIdx.x;
-    
-    // Handling arbitrary vector size
-    if (tid < n){
-        out[tid] = a[tid] + b[tid];
+    for(int i = 0; i < n; i++){
+        out[i] = a[i] + b[i];
     }
 }
 
@@ -43,8 +40,8 @@ int main(){
 
 
     // Executing kernel 
-    int block_size = 256;
-    int grid_size = N / block_size;
+    int block_size = 1;
+    int grid_size = 1;
     vector_add<<<grid_size,block_size>>>(d_out, d_a, d_b, N);
     
     // Transfer data back to host memory
