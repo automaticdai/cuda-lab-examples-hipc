@@ -1,3 +1,7 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
 #define N 1024*256
 
 void vector_add(float *out, float *a, float *b, int n) {
