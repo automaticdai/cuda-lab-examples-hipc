@@ -6,12 +6,12 @@ __global__ void helloWorld() {
 }
 
 int main() {
-    int grid = 3;
-    int block = 3;
+    int grid_size = 3;
+    int block_size = 3;
 
-    helloWorld<<<grid, block>>>();
+    helloWorld<<<grid_size, block_size>>>();
 
-    cudaDeviceReset();
+    cudaDeviceSynchronize();
 
     return 0;
 }
