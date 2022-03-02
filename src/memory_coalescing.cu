@@ -16,12 +16,6 @@ inline cudaError_t checkCuda(cudaError_t result)
     return result;
 }
 
-__global__ void offset(double* a, int s)
-{
-    int i = blockDim.x * blockIdx.x + threadIdx.x + s;
-    a[i] = a[i] + 1;
-}
-
 __global__ void stride(double* a, int s)
 {
     int i = (blockDim.x * blockIdx.x + threadIdx.x) * s;
@@ -44,23 +38,6 @@ void runTest(int deviceId, int nMB)
     checkCuda( cudaEventCreate(&startEvent) );
     checkCuda( cudaEventCreate(&stopEvent) );
 
-    printf("Offset, Bandwidth (GB/s):\n");
-    
-    offset<<<n/blockSize, blockSize>>>(d_a, 0); // warm up
-
-    for (int i = 0; i <= 32; i++) {
-        checkCuda( cudaMemset(d_a, 0, n * sizeof(double)) );
-
-        checkCuda( cudaEventRecord(startEvent,0) );
-        offset<<<n/blockSize, blockSize>>>(d_a, i);
-        checkCuda( cudaEventRecord(stopEvent,0) );
-        checkCuda( cudaEventSynchronize(stopEvent) );
-
-        checkCuda( cudaEventElapsedTime(&ms, startEvent, stopEvent) );
-        printf("%d, %f\n", i, 2*nMB/ms);
-    }
-
-    printf("\n");
     printf("Stride, Bandwidth (GB/s):\n");
 
     stride<<<n/blockSize, blockSize>>>(d_a, 1); // warm up
@@ -74,7 +51,7 @@ void runTest(int deviceId, int nMB)
         checkCuda( cudaEventSynchronize(stopEvent) );
 
         checkCuda( cudaEventElapsedTime(&ms, startEvent, stopEvent) );
-        printf("%d, %f\n", i, 2*nMB/ms);
+        printf("%d\t%f\n", i, 2*nMB/ms);
     }
 
     checkCuda( cudaEventDestroy(startEvent) );
